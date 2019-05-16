@@ -14,28 +14,17 @@
     </head>
     <body>
         <style>
+
             input {
-                width: 20%;
-                font-size: 1vw;
+                font-size: 1em;
                 font-style: normal;
                 font-family: "Times New Roman", Times, serif;
             }
             
             button {
-                width: 8vw;
-                font-size: 1vw;
+                font-size: 1em;
                 font-style: normal;
                 font-family: "Times New Roman", Times, serif;
-            }
-            
-            pre {
-                font-size: 1vw;
-                font-style: normal;
-                font-family: "Times New Roman", Times, serif;
-            }
-            
-            hr {
-                margin: 1% 0 0 0;
             }
         </style>
         <script>
@@ -50,20 +39,12 @@
             }
 
             function VandRS() {
-                let output = document.querySelector('pre'),
-                    input = document.querySelector('input').value;
-                switch (input) {
-                    case "":
-                        output.textContent = "Reversed text will appear when text is typed in the text box, and 'Reverse String' button is clicked.";
-                        return;
-                    default:
-                        output.textContent = ReverseString(input);
-                }               
+                let input = document.querySelector('input');
+                console.log(input.value);
+                input.value = ReverseString(input.value);  
             }
         </script>
         <input type="text">
         <button onclick="VandRS()">Reverse String</button>
-        <hr>
-        <pre>Reversed text will appear when text is typed in the text box, and 'Reverse String' button is clicked.</pre>
     </body>
 </html>
