@@ -48,35 +48,33 @@
         border: 2px solid #707070;
       }
 
-      div {
+      div, ul {
         color: #d0d0d0;
         width: 50%;
         margin: 2% 0 0 3%;
         
         border-radius: 10px;
         padding: 10px;
+
+
+        list-style-type: none;
       }
 
       div#help {
-        background-color: #305050;
-
+        animation: alert 1s;
       }
 
       @keyframes alert {
-        25% {
+        0%, 25% {
           background-color: #505099;
         }
-
+      
         50% {
           background-color: initial;
         }
 
-        75% {
+        75%, 100% {
           background-color: #505099;
-        }
-
-        100% {
-          background-color: initial;
         }
       }
     </style>
@@ -85,13 +83,12 @@
     <button disabled>Reverse String</button>
     <div id="help">Insert text greater than 2 characters (not spaces) in to the box above, extra spaces on 
       the edges will be trimed. Press 'Reverse String' to Reverse the text.</div>
-    <div id="info"></div>
+    <ul id="info">
+      <li>Input: Invaild</li>
+      <li>isPalindrome: Need Input</li>
+    </ul>
 
     <script type="text/javascript">
-      /*
-      TODO: use Jquery
-      */
-
       /*
         Unused utility Function: 
         this is what isPalindrome() is based off of.
@@ -109,25 +106,8 @@
 
         return ret;
       }
-      */
-
-      /* Utility Function */
-      function reverseString(string) {
-        // Gets the location of the last characters in the string 
-        const base = string.length - 1;
-        
-        // Accumulator
-        let ret = "";
-        
-        // Goes through string last-first adding the characters to the accumulator
-        for (let charpos in string) {
-          ret += string[base - charpos];
-        }
-
-        return ret;
-      }
       
-      /* Utility Function *
+      * Utility Function *
       broken on input "nnnn"
   
       function isPalindrome(string) {
@@ -148,24 +128,42 @@
       }
       */
 
+      /* Utility Function */
+      function reverseString(string) {
+        // Gets the location of the last characters in the string 
+        const base = string.length - 1;
+        
+        // Accumulator
+        let ret = "";
+        
+        // Goes through string last-first adding the characters to the accumulator
+        for (let charpos in string) {
+          ret += string[base - charpos];
+        }
+
+        return ret;
+      }
+
       /*Utility Function*/
       function isPalindrome(string) {
         const len = string.length - 1,
               midpoint = (len) / 2;
-
+//let charpos = Math.ceil(midpoint); charpos != string.length; charpos++
         for (let charpos in string) {
-          // Skips the first half and midpoint
-          if (charpos <= midpoint) { continue; }
-          
-          // Past midpoint and reflected chars are the same
           if (string[charpos] == string[len - charpos]) {
             continue;
           } else {
-            return false;
+            return false
           }
         }
         return true;
       }
+
+      // look up once
+      let input = document.querySelector('input'),
+          button = document.querySelector('button'),
+          infobox = document.querySelector('ul#info'),
+          helpbox = document.querySelector('div#help'); 
 
       /*
       Event Handler: for input:
@@ -173,18 +171,20 @@
          then enables (vaild input) or disables (invalid input) button.
         *TODO: Resizes input box to fit text.
       */
-      document.querySelector('input').onkeyup = 
+      input.onkeyup =
         function (keyObj) {
           this.value = this.value.trim();
 
           if (this.value.length < 2) { 
-            document.querySelector('button').setAttribute("disabled", "true");
+            button.setAttribute("disabled", "true");
+            infobox.children[0] = "Input: Invalid";
+            infobox.children[1] = "isPalindrome: Need Input";
+            // TODO animate helpbox, maybe use Jquery
           } else {
-            document.querySelector('button').removeAttribute("disabled");
-            //document.querySelector('div#help'); //TODO, Animate
+            button.removeAttribute("disabled");
+            infobox.children[0] = "Input: Valid";
+            infobox.children[1] = "isPalindrome: " + isPalindrome(this.value);
           }
-
-          document.querySelector("div#info").innerHTML = "isPalindrome: " + isPalindrome(this.value) + "\n";
         }
       
       /*
@@ -193,7 +193,6 @@
       */
       document.querySelector('button').onclick =
         function () {
-          const input = document.querySelector('input');
           input.value = reverseString(input.value);
         }
     </script>
