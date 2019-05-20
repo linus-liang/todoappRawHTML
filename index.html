@@ -48,18 +48,25 @@
         border: 2px solid #707070;
       }
 
-      div, ul {
+      div, ul, li {
         color: #d0d0d0;
+        background-color: #505060;
+        border-radius: 10px;
+
         width: 50%;
         margin: 2% 0 0 3%;
-        
-        border-radius: 10px;
         padding: 10px;
-
 
         list-style-type: none;
       }
 
+      li {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      /*
       div#help {
         animation: alert 1s;
       }
@@ -77,66 +84,23 @@
           background-color: #505099;
         }
       }
+      */
     </style>
 
     <input type="text">
     <button disabled>Reverse String</button>
-    <div id="help">Insert text greater than 2 characters (not spaces) in to the box above, extra spaces on 
-      the edges will be trimed. Press 'Reverse String' to Reverse the text.</div>
+    <div id="help">Insert text that is 2 characters or longer (not spaces) in to the text box above, extra spaces on 
+      the front/end will be trimed. Press 'Reverse String' to Reverse the text, the output is the text box.</div>
     <ul id="info">
-      <li>Input: Invaild</li>
+      <li>Input: Invalid</li>
       <li>isPalindrome: Need Input</li>
     </ul>
 
     <script type="text/javascript">
-      /*
-        Unused utility Function: 
-        this is what isPalindrome() is based off of.
-        It count all the characters of a string, and
-        places it in a object: "characters: amount"
-      *
-      
-      function enumerateChars(string) {
-        let ret = {};
-
-        for (let charpos in string) {
-          ret[string[charpos]] = ret[string[charpos]] || 0;
-          ret[string[charpos]] += 1;
-        }
-
-        return ret;
-      }
-      
-      * Utility Function *
-      broken on input "nnnn"
-  
-      function isPalindrome(string) {
-        // Oh no, its a mistake that makes the code work! Lucky me!
-        const midpoint = (string.length - 1) / 2;
-
-        let ret = {};
-
-        for (let charpos in string) {
-          if (charpos == midpoint) continue;
-
-          ret[string[charpos]] = ret[string[charpos]] || 0;
-          ret[string[charpos]] += 1;
-
-          if (charpos > midpoint && ret[string[charpos]] % 2 == 1) return false;
-        }
-        return true;
-      }
-      */
-
-      /* Utility Function */
-      function reverseString(string) {
-        // Gets the location of the last characters in the string 
+      function reverseString(string) { 
         const base = string.length - 1;
         
-        // Accumulator
         let ret = "";
-        
-        // Goes through string last-first adding the characters to the accumulator
         for (let charpos in string) {
           ret += string[base - charpos];
         }
@@ -144,19 +108,19 @@
         return ret;
       }
 
-      /*Utility Function*/
       function isPalindrome(string) {
         const len = string.length - 1,
-              midpoint = (len) / 2;
-//let charpos = Math.ceil(midpoint); charpos != string.length; charpos++
+              midpoint = len / 2;
+
         for (let charpos in string) {
+          if (charpos >= midpoint) { return true; };
+
           if (string[charpos] == string[len - charpos]) {
             continue;
           } else {
-            return false
+            return false;
           }
         }
-        return true;
       }
 
       // look up once
@@ -177,13 +141,15 @@
 
           if (this.value.length < 2) { 
             button.setAttribute("disabled", "true");
-            infobox.children[0] = "Input: Invalid";
-            infobox.children[1] = "isPalindrome: Need Input";
+
+            infobox.children[0].innerHTML = "Input: Invalid";
+            infobox.children[1].innerHTML = "isPalindrome: Need Input";
             // TODO animate helpbox, maybe use Jquery
           } else {
             button.removeAttribute("disabled");
-            infobox.children[0] = "Input: Valid";
-            infobox.children[1] = "isPalindrome: " + isPalindrome(this.value);
+
+            infobox.children[0].innerHTML = "Input: Valid";
+            infobox.children[1].innerHTML = "isPalindrome: " + isPalindrome(this.value);
           }
         }
       
