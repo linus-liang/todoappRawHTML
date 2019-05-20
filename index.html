@@ -1,50 +1,201 @@
 <!DOCTYPE html>
 
 <html lang="en-US">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" 
-              content="width=device-width,
-                       height=device-width, 
-                       initial-scale=1.0">
-        <meta http-equiv="Content-Security-Policy" 
-              content="default-src 'none';
-                       script-src 'self' 'unsafe-inline';
-                       style-src 'self' 'unsafe-inline';">
-    </head>
-    <body>
-        <style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" 
+          content="width=device-width,
+                   height=device-width, 
+                   initial-scale=1.0">
+    <meta http-equiv="Content-Secrity-Policy"
+          content="default: none
+                   script-src: 'self';
+                   style-src: 'self';">
+  </head>
+  <body>
+    <style>
+      * {
+        background-color: #000000;
+        box-sizing: border-box;
+      }
+      
+      input {
+        background-color: #505050;
+        border: 2px solid #707070;
+        
+        color: #d0d0d0;
+        font-size: 1.1em;
+        font-style: normal;
+        font-family: "Times New Roman", Times, serif;
+      }
 
-            input {
-                font-size: 1em;
-                font-style: normal;
-                font-family: "Times New Roman", Times, serif;
-            }
-            
-            button {
-                font-size: 1em;
-                font-style: normal;
-                font-family: "Times New Roman", Times, serif;
-            }
-        </style>
-        <script>
-            function ReverseString(string) {
-                let ret = "",
-                    base = string.length - 1;
+      button {
+        background-color: #505050;
+        border: 2px solid #707070;
+        color: #d0d0d0;
+        font-size: 1.1em;
+        font-style: normal;
+        font-family: "Times New Roman", Times, serif;
+      }
 
-                for (let charpos in string) {
-                    ret += string[base - charpos];
-                }
-                return ret;
-            }
+      button:hover {
+        background-color: #303070;
+        border: 2px solid #707070;
+      }
 
-            function VandRS() {
-                let input = document.querySelector('input');
-                console.log(input.value);
-                input.value = ReverseString(input.value);  
-            }
-        </script>
-        <input type="text">
-        <button onclick="VandRS()">Reverse String</button>
-    </body>
+      button:disabled {
+        background-color: #000000;
+        border: 2px solid #707070;
+      }
+
+      div {
+        color: #d0d0d0;
+        width: 50%;
+        margin: 2% 0 0 3%;
+        
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      div#help {
+        background-color: #305050;
+
+      }
+
+      @keyframes alert {
+        25% {
+          background-color: #505099;
+        }
+
+        50% {
+          background-color: initial;
+        }
+
+        75% {
+          background-color: #505099;
+        }
+
+        100% {
+          background-color: initial;
+        }
+      }
+    </style>
+
+    <input type="text">
+    <button disabled>Reverse String</button>
+    <div id="help">Insert text greater than 2 characters (not spaces) in to the box above, extra spaces on 
+      the edges will be trimed. Press 'Reverse String' to Reverse the text.</div>
+    <div id="info"></div>
+
+    <script type="text/javascript">
+      /*
+      TODO: use Jquery
+      */
+
+      /*
+        Unused utility Function: 
+        this is what isPalindrome() is based off of.
+        It count all the characters of a string, and
+        places it in a object: "characters: amount"
+      *
+      
+      function enumerateChars(string) {
+        let ret = {};
+
+        for (let charpos in string) {
+          ret[string[charpos]] = ret[string[charpos]] || 0;
+          ret[string[charpos]] += 1;
+        }
+
+        return ret;
+      }
+      */
+
+      /* Utility Function */
+      function reverseString(string) {
+        // Gets the location of the last characters in the string 
+        const base = string.length - 1;
+        
+        // Accumulator
+        let ret = "";
+        
+        // Goes through string last-first adding the characters to the accumulator
+        for (let charpos in string) {
+          ret += string[base - charpos];
+        }
+
+        return ret;
+      }
+      
+      /* Utility Function *
+      broken on input "nnnn"
+  
+      function isPalindrome(string) {
+        // Oh no, its a mistake that makes the code work! Lucky me!
+        const midpoint = (string.length - 1) / 2;
+
+        let ret = {};
+
+        for (let charpos in string) {
+          if (charpos == midpoint) continue;
+
+          ret[string[charpos]] = ret[string[charpos]] || 0;
+          ret[string[charpos]] += 1;
+
+          if (charpos > midpoint && ret[string[charpos]] % 2 == 1) return false;
+        }
+        return true;
+      }
+      */
+
+      /*Utility Function*/
+      function isPalindrome(string) {
+        const len = string.length - 1,
+              midpoint = (len) / 2;
+
+        for (let charpos in string) {
+          // Skips the first half and midpoint
+          if (charpos <= midpoint) { continue; }
+          
+          // Past midpoint and reflected chars are the same
+          if (string[charpos] == string[len - charpos]) {
+            continue;
+          } else {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      /*
+      Event Handler: for input:
+        *checks if the input is valid (2 or more letters, trim spaces),
+         then enables (vaild input) or disables (invalid input) button.
+        *TODO: Resizes input box to fit text.
+      */
+      document.querySelector('input').onkeyup = 
+        function (keyObj) {
+          this.value = this.value.trim();
+
+          if (this.value.length < 2) { 
+            document.querySelector('button').setAttribute("disabled", "true");
+          } else {
+            document.querySelector('button').removeAttribute("disabled");
+            //document.querySelector('div#help'); //TODO, Animate
+          }
+
+          document.querySelector("div#info").innerHTML = "isPalindrome: " + isPalindrome(this.value) + "\n";
+        }
+      
+      /*
+      Event Handler: for button:
+        *Sets input to its content reversed
+      */
+      document.querySelector('button').onclick =
+        function () {
+          const input = document.querySelector('input');
+          input.value = reverseString(input.value);
+        }
+    </script>
+  </body>
 </html>
