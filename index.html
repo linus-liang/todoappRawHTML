@@ -3,14 +3,14 @@
 <html lang="en-US">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" 
+    <meta name="viewport"
           content="width=device-width,
-                   height=device-width, 
+                   height=device-width,
                    initial-scale=1.0">
-    <meta http-equiv="Content-Secrity-Policy"
-          content="default: none
-                   script-src: 'self';
-                   style-src: 'self';">
+    <meta http-equiv="content-security-policy"
+          content="default-src 'none';
+                   script-src 'unsafe-inline';
+                   style-src 'unsafe-inline';">
   </head>
   <body>
     <style>
@@ -18,11 +18,11 @@
         background-color: #000000;
         box-sizing: border-box;
       }
-      
+
       input {
         background-color: #505050;
         border: 2px solid #707070;
-        
+
         color: #d0d0d0;
         font-size: 1.1em;
         font-style: normal;
@@ -75,7 +75,7 @@
         0%, 25% {
           background-color: #505099;
         }
-      
+
         50% {
           background-color: initial;
         }
@@ -89,17 +89,17 @@
 
     <input type="text">
     <button disabled>Reverse String</button>
-    <div id="help">Insert text that is 2 characters or longer (not spaces) in to the text box above, extra spaces on 
+    <div id="help">Insert text that is 2 characters or longer (not spaces) in to the text box above, extra spaces on
       the front/end will be trimed. Press 'Reverse String' to Reverse the text, the output is the text box.</div>
     <ul id="info">
       <li>Input: Invalid</li>
       <li>isPalindrome: Need Input</li>
     </ul>
 
-    <script type="text/javascript">
-      function reverseString(string) { 
+    <script>
+      function reverseString(string) {
         const base = string.length - 1;
-        
+
         let ret = "";
         for (let charpos in string) {
           ret += string[base - charpos];
@@ -127,7 +127,7 @@
       let input = document.querySelector('input'),
           button = document.querySelector('button'),
           infobox = document.querySelector('ul#info'),
-          helpbox = document.querySelector('div#help'); 
+          helpbox = document.querySelector('div#help');
 
       /*
       Event Handler: for input:
@@ -139,7 +139,7 @@
         function (keyObj) {
           this.value = this.value.trim();
 
-          if (this.value.length < 2) { 
+          if (this.value.length < 2) {
             button.setAttribute("disabled", "true");
 
             infobox.children[0].innerHTML = "Input: Invalid";
@@ -152,7 +152,7 @@
             infobox.children[1].innerHTML = "isPalindrome: " + isPalindrome(this.value);
           }
         }
-      
+
       /*
       Event Handler: for button:
         *Sets input to its content reversed
