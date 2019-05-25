@@ -85,84 +85,60 @@
       }
     </style>
 
-    <div id="help" class="animate">Insert text that is 2 characters or longer (not spaces) in to the text box above, extra spaces on
-      the front/end will be trimed. Press 'Reverse String' to Reverse the text, the output is the text box.</div>
+    <div id="helpbox" class="animate">Insert text that is 2 or more characters (not spaces) in to the text box below, extra spaces on
+      the front/end will be trimed. Press 'Reverse String' to Reverse the text, the output the first blue box.</div>
 
     <input type="text">
     <button disabled>Reverse String</button>
     <div id="output"></div>
-      
+
     <ul>
+      <span>Stats:</span>
       <li id="inputStatus">Input: Invalid</li>
       <li id="isPalindromeStatus">isPalindrome: Need Input</li>
     </ul>
 
     <script>
-      function reverseString(string) {
-        const base = string.length - 1;
-
-        let ret = "";
-        for (let charpos in string) {
-          ret += string[base - charpos];
-        }
-
-        return ret;
-      }
-
-      function isPalindrome(string) {
-        const len = string.length - 1;
-        const midpoint = len / 2;
-
-        for (let charpos in string) {
-          if (charpos >= midpoint) { return true; };
-
-          if (string[charpos] == string[len - charpos]) {
-            continue;
-          } else {
-            return false;
-          }
-        }
-      }
-
-      const input = document.querySelector('input');
+      const inputbox = document.querySelector('input');
       const output = document.querySelector('#output');
       const button = document.querySelector('button');
-      const helpbox = document.querySelector('#help');
+      const helpbox = document.querySelector('#helpbox');
       const inputStatus = document.querySelector('#inputStatus');
       const isPalindromeStatus = document.querySelector('#isPalindromeStatus');
 
       /*
-      Event Handler: for input:
-        *checks if the input is valid (2 or more letters, trim spaces),
-         then enables (vaild input) or disables (invalid input) button.
-        *TODO: Resizes input box to fit text.
-      */
-      input.onkeyup = function (keyObj) {
-        input.value = input.value.trim();
+       *Event Handler: for input:
+       *  *checks if the input is valid (2 or more letters, trim spaces),
+       *   then enables (vaild input) or disables (invalid input) button.
+       *  *TODO: Resizes input box to fit text.
+       */
+      inputbox.onkeyup = function (keyObj) {
+        const input = inputbox.value = inputbox.value.trim();
 
-        if (input.value.length < 2) {
+        if (input.length > 2) {
+          button.removeAttribute("disabled");
+
+          inputStatus.textContent = "Input: Valid";
+          isPalindromeStatus.textContent = "isPalindrome: " +
+            (input == [...input].reverse().join(""));
+
+          helpbox.classList.remove("animate");
+        } else {
           button.setAttribute("disabled", "true");
 
           inputStatus.textContent = "Input: Invalid";
           isPalindromeStatus.textContent = "isPalindrome: Need Input";
-      
+
           helpbox.classList.add("animate");
-        } else {
-          button.removeAttribute("disabled");
-
-          inputStatus.textContent = "Input: Valid";
-          isPalindromeStatus.textContent = "isPalindrome: " + isPalindrome(input.value);
-
-          helpbox.classList.remove("animate");
         }
       }
 
       /*
-      Event Handler: for button:
-        *Sets input to its content reversed
-      */
+       *Event Handler: for button:
+       *  *Sets input to its content reversed
+       */
       button.onclick = function () {
-        output.textContent = reverseString(input.value);
+        output.textContent = [...inputbox.value].reverse().join("");
       }
     </script>
   </body>
