@@ -19,36 +19,27 @@
         box-sizing: border-box;
       }
 
-      input {
-        background-color: #505050;
-        border: 2px solid #707070;
-
+      input, button, pre {
         color: #d0d0d0;
         font-size: 1.1em;
         font-style: normal;
         font-family: "Times New Roman", Times, serif;
       }
 
-      button {
+      input, button {
         background-color: #505050;
         border: 2px solid #707070;
-        color: #d0d0d0;
-        font-size: 1.1em;
-        font-style: normal;
-        font-family: "Times New Roman", Times, serif;
       }
 
       button:hover {
         background-color: #303070;
-        border: 2px solid #707070;
       }
 
       button:disabled {
         background-color: #000000;
-        border: 2px solid #707070;
       }
 
-      div, ul, li, span {
+      div, ul, li, pre {
         color: #d0d0d0;
         background-color: #505060;
         border-radius: 10px;
@@ -56,14 +47,14 @@
         width: 50%;
         margin: 1% 0 1% 3%;
         padding: 10px;
-
-        list-style-type: none;
       }
 
       li {
         width: 100%;
         margin: 0;
         padding: 0;
+        
+        list-style-type: none;
       }
 
       div.animate {
@@ -85,15 +76,15 @@
       }
     </style>
 
-    <div id="helpbox" class="animate">Insert text that is 2 or more characters (not spaces) in to the text box below, extra spaces on
-      the front/end will be trimed. Press 'Reverse String' to Reverse the text, the output the first blue box.</div>
+    <div id="helpbox">Insert text that is 2 or more characters (not spaces) in to the text box below, extra spaces on
+      the front/end are disallowed. Press 'Reverse String' to Reverse the text, reverseed text will appear in the first blue box.</div>
 
     <input type="text">
     <button disabled>Reverse String</button>
-    <div id="output"></div>
+    <pre id="output"> </pre>
 
     <ul>
-      <span>Stats:</span>
+      <pre>Stats:</pre>
       <li id="inputStatus">Input: Invalid</li>
       <li id="isPalindromeStatus">isPalindrome: Need Input</li>
     </ul>
@@ -106,30 +97,46 @@
       const inputStatus = document.querySelector('#inputStatus');
       const isPalindromeStatus = document.querySelector('#isPalindromeStatus');
 
+      // Blocks space if text isn't before it, continued in onkeyup Event Handler.
+      inputbox.onkeydown = function (keyObj) {
+        if ((this.value.trim() == "") && (keyObj.key == " ")) {
+          keyObj.preventDefault();
+          helpbox.classList.add("animate");
+        } else {
+          helpbox.classList.remove("animate");
+        }
+      }
+
       /*
        *Event Handler: for input:
        *  *checks if the input is valid (2 or more letters, trim spaces),
        *   then enables (vaild input) or disables (invalid input) button.
        *  *TODO: Resizes input box to fit text.
        */
-      inputbox.onkeyup = function (keyObj) {
-        const input = inputbox.value = inputbox.value.trim();
+      inputbox.onkeyup = function () {
+        // Continues from blocking space: removes everything if just spaces
+        if (this.value.trim() == "") {
+          this.value = "";
+        }
+        
+        // Start of input processing
+        const input = inputbox.value;
 
-        if (input.length > 2) {
-          button.removeAttribute("disabled");
-
-          inputStatus.textContent = "Input: Valid";
-          isPalindromeStatus.textContent = "isPalindrome: " +
-            (input == [...input].reverse().join(""));
-
-          helpbox.classList.remove("animate");
-        } else {
+        if (input.length < 2) {
           button.setAttribute("disabled", "true");
 
           inputStatus.textContent = "Input: Invalid";
           isPalindromeStatus.textContent = "isPalindrome: Need Input";
 
           helpbox.classList.add("animate");
+        } else {
+          button.removeAttribute("disabled");
+
+          inputStatus.textContent = "Input: Valid";
+          isPalindromeStatus.textContent = "isPalindrome: " + 
+            (input == [...input].reverse().join(""));
+
+          helpbox.classList.remove("animate");
         }
       }
 
@@ -138,7 +145,7 @@
        *  *Sets input to its content reversed
        */
       button.onclick = function () {
-        output.textContent = [...inputbox.value].reverse().join("");
+        output.textContent = [...inputbox.value.trim()].reverse().join("");
       }
     </script>
   </body>
